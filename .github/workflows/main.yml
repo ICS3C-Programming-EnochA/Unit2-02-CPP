@@ -1,53 +1,69 @@
+
 ##################################################
 
-# Run Mr Raffin's Super Linter against code base #
+# Run Mr Coxall's Super Linter against code base #
 
 ##################################################
 
 ---
 
-name: Ms Raffin's Super Linter
+name: Mr Coxall's Super Linter
+
 
 on: [push, pull_request]
 
+
 jobs:
 
-  run-linters:
+ run-linters:
 
-    name: Ms Raffin's Super Linter
+   name: Mr Coxall's Super Linter
 
-    runs-on: ubuntu-latest
+   runs-on: ubuntu-latest
 
-    steps:
 
-      - name: Check out Git repository 🚦
+   steps:
 
-        uses: actions/checkout@main
+     - name: Check out Git repository
 
-      - name: Run GitHub Super Linter 🚀
+       uses: actions/checkout@main
 
-        uses: mr-coxall/super-linter@master
 
-        env:
+     # remove section if you do not have any htm, js or ts files!
 
-          VALIDATE_ALL_CODEBASE: true
+     - name: Prettify code
 
-          LINTER_RULES_PATH: /
+       uses: Mr-Coxall/prettier_action@main
 
-          VALIDATE_CLANG_FORMAT: false
+       with:
 
-          VALIDATE_JAVASCRIPT_STANDARD: false
+         # run Prettier and change code that needs fixing, before next section
 
-          VALIDATE_GOOGLE_JAVA_FORMAT: false
+         prettier_options: --write **/*.{html,css,js,ts,jsx,tsx,json}
 
-          VALIDATE_PYTHON_FLAKE8: false
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          VALIDATE_GITLEAKS: false # for secrets detection
 
-          VALIDATE_JSON: false
+     - name: Run GitHub Super Linter
 
-          VALIDATE_JSCPD: false # for copy and paste detection
+       uses: github/super-linter@main
 
-          DEFAULT_BRANCH: main
+       env:
 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         VALIDATE_ALL_CODEBASE: true
+
+         LINTER_RULES_PATH: /
+
+         VALIDATE_CLANG_FORMAT: false
+
+         VALIDATE_JAVASCRIPT_STANDARD: false
+
+         VALIDATE_PYTHON_FLAKE8: false
+
+         VALIDATE_GITLEAKS: false # for secrets detection
+
+         VALIDATE_JSCPD: false # for copy and paste detection
+
+         DEFAULT_BRANCH: main
+
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
